@@ -1,0 +1,16 @@
+# Core data + ML stack (all free / open source)
+pandas==3.0.5
+numpy==2.5.2
+scipy==1.18.1
+scikit-learn==1.9.0
+
+# Matrix factorisation (SVD). Falls back to a built-in NumPy implementation
+# if a wheel is unavailable, so this is effectively optional.
+scikit-surprise==1.1.5
+
+# Visualisation
+matplotlib==3.11.1
+plotly==6.9.0
+
+# Web app
+streamlit==1.62.0
