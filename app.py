@@ -9,6 +9,7 @@ Four sections:
   * Model Comparison   - RMSE / MAE / precision / recall across models
 """
 from __future__ import annotations
+from src import posters
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -81,7 +82,37 @@ def show_movies(df: pd.DataFrame, score_col=None, score_label="score"):
     view = view[order].rename(columns=cols)
     st.dataframe(view, width='stretch', hide_index=True)
 
-
+def render_movie_cards(df, score_col=None, score_label="Score", per_row=5):
+    """Poster-card grid; falls back to the text table if there's no API key."""
+    if df is None or len(df) == 0:
+        st.info("No results.")
+        return
+    if not posters.has_key():
+        show_movies(df, score_col, score_label)
+        return
+    rows = df.to_dict("records")
+    for i in range(0, len(rows), per_row):
+        cols = st.columns(per_row)
+        for col, item in zip(cols, rows[i:i + per_row]):
+            with col:
+                url = posters.poster_url(int(item["movieId"]))
+                if url:
+                    st.image(url, width='stretch')
+                else:
+                    st.markdown(
+                        "<div style='aspect-ratio:2/3;background:#1c2333;border-radius:8px;"
+                        "display:flex;align-items:center;justify-content:center;font-size:2rem'>🎬</div>",
+                        unsafe_allow_html=True)
+                st.markdown(f"**{item['title']}**")
+                bits = []
+                if score_col and score_col in item and pd.notna(item.get(score_col)):
+                    bits.append(f"{score_label} {round(float(item[score_col]), 3)}")
+                if "avg_rating" in item and pd.notna(item.get("avg_rating")):
+                    bits.append(f"⭐ {item['avg_rating']}")
+                if bits:
+                    st.caption(" · ".join(bits))
+                if item.get("why"):
+                    st.caption(item["why"])
 # ---------------------------------------------------------------------------
 # sidebar
 # ---------------------------------------------------------------------------
@@ -133,7 +164,7 @@ if page == "🎯 Recommendations":
         if rec.is_cold_start(user_id):
             st.warning("Cold start: this user has no ratings — showing popular movies.")
         recs = rec.get_recommendations(user_id, n=n, model=model)
-        show_movies(recs, score_col="score", score_label="Score")
+        render_movie_cards(recs, score_col="score", score_label="score")
 
 
 # ---------------------------------------------------------------------------
@@ -160,7 +191,7 @@ elif page == "🔎 Similar Movies":
         st.subheader(f"Because you're looking at: {rec.ds.title(movie_id)}")
         st.caption(f"Genres: {rec.ds.genres(movie_id) or '—'}")
         sim = rec.get_similar_movies(movie_id, n=n, method=method)
-        show_movies(sim, score_col="similarity", score_label="Similarity")
+        render_movie_cards(sim, score_col="similarity", score_label="Similarity")
 
 
 # ---------------------------------------------------------------------------
@@ -186,7 +217,7 @@ elif page == "🆕 New User (cold start)":
         if not ratings:
             st.warning("Pick at least one movie (or see the Popular fallback below).")
         recs = rec.recommend_for_new_user(ratings, n=n)
-        show_movies(recs, score_col="score", score_label="Score")
+        render_movie_cards(recs, score_col="score", score_label="Score")
 
 
 # ---------------------------------------------------------------------------
