@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CineMatch</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <div class="wrap">
+        <h1>CineMatch</h1>
+        <p class="sub">Movie recommendations on MovieLens - collaborative filtering, five models compared</p>
+        <nav>
+            <button class="tab active" data-tab="recs">Recommendations</button>
+            <button class="tab" data-tab="similar">similar Movies</button>
+            <button class="tab" data-tab="compare">Model Comparison</button>
+        </nav>
+    </div>
+</header>
+
+<main class="wrap">
+    <section id="recs" class="panel active">
+        <div class="controls">
+            <label>User <select id="userSel"></select></label>
+            <label>Model <select id="modelSel"></select></label>
+        </div>
+        <div id="recsGrid" class="grid"></div>
+    </section>
+
+    <section id="similar" class="panel">
+        <div class="controls">
+            <input id="movieSearch" type="text" placeholder="Search a movie... (e.g. Matrix)">
+            <select id="movieSel"></select>
+        </div>
+        <h3 id="similarTitle" class="section-title"></h3>
+        <div id="similarGrid" class="grid"></div>
+    </section>
+
+    <section id="compare" class="panel">
+        <p class="note"> SVD is the best rating predeictor (lowest RMSE); the hybrid builds the best top-10 lists (highest precision/recall).</p>
+        <div id="metrocsWrap"></div>
+    </section>
+</main>
+<footer class="wrap">
+    static demo . data from <a href="https://grouplens.org/datasets/movielens/">GroupLens MovieLens</a>,
+    posters from TMDB . <a href="https://github.com/rushabh69/cinematch">source</a>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</head>
