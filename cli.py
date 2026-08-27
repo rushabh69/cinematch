@@ -39,7 +39,6 @@ pd.set_option("display.max_columns", 30)
 pd.set_option("display.max_colwidth", 50)
 
 
-# ---------------------------------------------------------------------------
 def get_system(rebuild: bool = False) -> RecommenderSystem:
     cache = config.ARTIFACTS_DIR / "recommender.pkl"
     if cache.exists() and not rebuild:
@@ -74,7 +73,6 @@ def _show(df: pd.DataFrame, cols=None):
     print(df.to_string(index=False))
 
 
-# ---------------------------------------------------------------------------
 def cmd_recommend(rec, args):
     if rec.is_cold_start(args.user_id):
         print(f"User {args.user_id} is a COLD START (no history) -> popularity fallback\n")
@@ -147,7 +145,6 @@ def cmd_compare(rec, args):
           "higher Precision/Recall = better top-N ranking.")
 
 
-# ---------------------------------------------------------------------------
 def build_parser():
     p = argparse.ArgumentParser(
         description="MovieLens collaborative-filtering recommender (CLI).")

@@ -25,9 +25,7 @@ from src.recommender import RecommenderSystem, DEFAULT_MODEL
 st.set_page_config(page_title="MovieLens Recommender", page_icon="🎬", layout="wide")
 
 
-# ---------------------------------------------------------------------------
 # load / build the system once, cached across reruns
-# ---------------------------------------------------------------------------
 @st.cache_resource(show_spinner=True)
 def load_system() -> RecommenderSystem:
     cache = config.ARTIFACTS_DIR / "recommender.pkl"
@@ -57,7 +55,7 @@ STAR = "⭐"
 
 
 def stars(x):
-    try:
+    try:s
         return STAR * int(round(float(x)))
     except Exception:
         return ""
@@ -113,9 +111,7 @@ def render_movie_cards(df, score_col=None, score_label="Score", per_row=5):
                     st.caption(" · ".join(bits))
                 if item.get("why"):
                     st.caption(item["why"])
-# ---------------------------------------------------------------------------
 # sidebar
-# ---------------------------------------------------------------------------
 st.sidebar.title("🎬 MovieLens Recommender")
 st.sidebar.caption("Collaborative filtering on ml-latest-small")
 page = st.sidebar.radio(
@@ -133,9 +129,7 @@ if metrics is not None:
                         f"({metrics['RMSE'].min():.3f})")
 
 
-# ---------------------------------------------------------------------------
 # 1. Recommendations
-# ---------------------------------------------------------------------------
 if page == "🎯 Recommendations":
     st.header("🎯 Personalised recommendations")
     c1, c2, c3 = st.columns([2, 2, 1])
@@ -167,9 +161,7 @@ if page == "🎯 Recommendations":
         render_movie_cards(recs, score_col="score", score_label="score")
 
 
-# ---------------------------------------------------------------------------
 # 2. Similar movies
-# ---------------------------------------------------------------------------
 elif page == "🔎 Similar Movies":
     st.header("🔎 Movies similar to…")
     c1, c2, c3 = st.columns([3, 1.5, 1])
@@ -194,9 +186,7 @@ elif page == "🔎 Similar Movies":
         render_movie_cards(sim, score_col="similarity", score_label="Similarity")
 
 
-# ---------------------------------------------------------------------------
 # 3. New user cold start
-# ---------------------------------------------------------------------------
 elif page == "🆕 New User (cold start)":
     st.header("🆕 New user — build a taste profile")
     st.write("Pick a few movies you love. We fold you into the model **without "
@@ -220,9 +210,7 @@ elif page == "🆕 New User (cold start)":
         render_movie_cards(recs, score_col="score", score_label="Score")
 
 
-# ---------------------------------------------------------------------------
 # 4. Model comparison
-# ---------------------------------------------------------------------------
 elif page == "📊 Model Comparison":
     st.header("📊 Model comparison")
     if metrics is None:
@@ -262,9 +250,7 @@ elif page == "📊 Model Comparison":
         )
 
 
-# ---------------------------------------------------------------------------
 # 5. About
-# ---------------------------------------------------------------------------
 else:
     st.header("ℹ️ About this project")
     st.markdown(
