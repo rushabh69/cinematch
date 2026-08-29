@@ -591,4 +591,6 @@ def build_all_models():
         "Popularity": PopularityRecommender(),
         "User-based CF": UserBasedCF(),
         "Item-based CF": ItemBasedCF(),
-        "SVD (Matrix Factorisation)": MatrixFact
+    "SVD (Matrix Factorisation)": MatrixFactorizationCF(),
+        "Hybrid (CF + Content)": HybridRecommender(),
+    }
